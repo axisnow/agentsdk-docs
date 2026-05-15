@@ -93,6 +93,7 @@ nav:
       - introduction/index.md
       - 概览: introduction/overview.md
       - Quickstart: introduction/quickstart.md
+      - 白皮书: introduction/whitepaper.md
       - 深入介绍:
           - 系统架构: introduction/architecture.md
           - DNS 配置: introduction/dns.md
