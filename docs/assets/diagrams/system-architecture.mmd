@@ -1,0 +1,51 @@
+graph LR
+    subgraph 客户端设备
+        App["应用程序"]
+        subgraph SDK
+            TCP["TCP 代理<br/>127.0.0.1:port"]
+            HTTP["HTTP 代理<br/>127.0.0.1:port"]
+            SOCKS5["SOCKS5 代理<br/>127.0.0.1:port"]
+            DNS["DNS 解析器<br/>(DNS 模块)"]
+            LB["负载均衡<br/>多节点竞速"]
+        end
+    end
+
+    CtrlNode["控制面节点<br/>(Edge DoH)"]
+
+    subgraph 数据面节点
+        D1["AxisNow 节点"]
+        D2["CF / AWS 节点"]
+        D3["节点 N"]
+    end
+
+    Origin["源站服务器"]
+
+    App -->|"原始请求"| TCP
+    App -->|"HTTP 请求"| HTTP
+    App -->|"SOCKS5 请求"| SOCKS5
+
+    TCP --> LB
+    HTTP --> LB
+    SOCKS5 --> LB
+
+    LB ==>|"TLS 加密隧道"| D1
+    LB -->D2
+    LB -->D3
+
+    D1 -->|"转发"| Origin
+    D2 -->|"转发"| Origin
+    D3 -->|"转发"| Origin
+
+    DNS -.->|"寻址 & 同步"| CtrlNode
+
+    style App fill:#4A90D9,stroke:#357ABD,color:#fff
+    style TCP fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style HTTP fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style SOCKS5 fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style DNS fill:#20B2AA,stroke:#008B8B,color:#fff
+    style LB fill:#FF8C00,stroke:#FF6600,color:#fff
+    style CtrlNode fill:#3CB371,stroke:#2E8B57,color:#fff
+    style D1 fill:#3CB371,stroke:#2E8B57,color:#fff
+    style D2 fill:#3CB371,stroke:#2E8B57,color:#fff
+    style D3 fill:#3CB371,stroke:#2E8B57,color:#fff
+    style Origin fill:#DC143C,stroke:#B22222,color:#fff

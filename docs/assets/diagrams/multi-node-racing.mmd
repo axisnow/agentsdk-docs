@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant SDK as SDK 负载均衡
+    participant E1 as Edge 节点 1
+    participant E2 as Edge 节点 2
+    participant E3 as Edge 节点 3
+
+    Note over SDK: 需要建立隧道连接
+
+    par 并行竞速连接
+        SDK->>E1: TLS 握手
+        SDK->>E2: TLS 握手
+        SDK->>E3: TLS 握手
+    end
+
+    E2-->>SDK: 握手成功 (最快响应)
+    Note over SDK: 选择 Edge 2 作为隧道节点
+
+    E1--xSDK: 取消连接
+    E3--xSDK: 取消连接
+
+    SDK->>E2: 通过此节点转发流量
+    Note over SDK: 自适应负载均衡<br/>记录节点响应时间<br/>动态调整权重

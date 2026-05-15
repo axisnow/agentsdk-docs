@@ -1,0 +1,49 @@
+flowchart TD
+    Start["域名解析请求<br/>host = example.com"] --> CacheHit{"命中缓存？<br/>(未过期)"}
+
+    CacheHit -->|"是"| ReturnCache["直接返回缓存结果"]
+    CacheHit -->|"否"| BypassMatch{"命中<br/>edgedoh_bypass_domains？<br/>(精确 / *.suffix 通配)"}
+
+    BypassMatch -->|"是"| SystemEngine["系统 DNS 引擎<br/>(net.Resolver)"]
+    BypassMatch -->|"否"| ResolveMatch{"命中<br/>edgedoh_resolve_domains？<br/>(精确 / *.suffix 通配)"}
+
+    ResolveMatch -->|"否"| SystemEngine
+    ResolveMatch -->|"是"| EdgeDoHEngine["EdgeDoH 引擎<br/>(自有 Edge 节点)"]
+
+    EdgeDoHEngine --> EdgeSuccess{"解析成功？"}
+    EdgeSuccess -->|"是"| ApplyTTL["应用 TTL 约束<br/>min_cache_ttl ≤ TTL ≤ max_cache_ttl"]
+
+    EdgeSuccess -->|"否 / 慢"| FallbackCheck{"fallback=true？"}
+    FallbackCheck -->|"是"| HedgedSystem["hedged 并发<br/>系统 DNS 兜底"]
+    FallbackCheck -->|"否"| ExpiredCheck
+
+    HedgedSystem --> SysSuccess{"成功？"}
+    SysSuccess -->|"是"| ApplyTTL
+    SysSuccess -->|"否"| ExpiredCheck
+
+    SystemEngine --> SysOnlySuccess{"解析成功？"}
+    SysOnlySuccess -->|"是"| ApplyTTL
+    SysOnlySuccess -->|"否"| ExpiredCheck
+
+    ApplyTTL --> WriteCache["写入缓存"] --> ReturnResult["返回解析结果"]
+
+    ExpiredCheck{"enable_expired_ip<br/>且有过期缓存？"}
+    ExpiredCheck -->|"是"| ReturnExpired["返回过期缓存<br/>(降级)"]
+    ExpiredCheck -->|"否"| ReturnError["返回错误"]
+
+    style Start fill:#4A90D9,stroke:#357ABD,color:#fff
+    style CacheHit fill:#FFD700,stroke:#DAA520,color:#333
+    style BypassMatch fill:#FFD700,stroke:#DAA520,color:#333
+    style ResolveMatch fill:#FFD700,stroke:#DAA520,color:#333
+    style EdgeDoHEngine fill:#3CB371,stroke:#2E8B57,color:#fff
+    style SystemEngine fill:#778899,stroke:#696969,color:#fff
+    style EdgeSuccess fill:#FFD700,stroke:#DAA520,color:#333
+    style SysSuccess fill:#FFD700,stroke:#DAA520,color:#333
+    style SysOnlySuccess fill:#FFD700,stroke:#DAA520,color:#333
+    style FallbackCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style ExpiredCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style HedgedSystem fill:#778899,stroke:#696969,color:#fff
+    style ReturnCache fill:#3CB371,stroke:#2E8B57,color:#fff
+    style ReturnResult fill:#3CB371,stroke:#2E8B57,color:#fff
+    style ReturnExpired fill:#FF8C00,stroke:#FF6600,color:#fff
+    style ReturnError fill:#DC143C,stroke:#B22222,color:#fff

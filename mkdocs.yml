@@ -1,0 +1,123 @@
+site_name: AgentSDK 开发者文档
+site_description: AgentSDK 接入指南、API 参考、错误码与术语表
+site_url: https://axisnow.github.io/agentsdk-docs/
+site_author: AxisNow
+repo_url: https://github.com/axisnow/agentsdk-docs
+repo_name: axisnow/agentsdk-docs
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: zh
+  custom_dir: overrides
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - search.share
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色模式
+  icon:
+    repo: fontawesome/brands/github
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+
+nav:
+  - 首页: index.md
+  - 简介:
+      - introduction/index.md
+      - 概览: introduction/overview.md
+      - Quickstart: introduction/quickstart.md
+      - 深入介绍:
+          - 系统架构: introduction/architecture.md
+          - DNS 配置: introduction/dns.md
+          - 控制面路由: introduction/control-plane.md
+          - 术语表: glossary.md
+  - 指南:
+      - guides/index.md
+      - 接入准备: guides/prerequisites.md
+      - 初始化 SDK: guides/initialize.md
+      - 集成网络库: guides/network-integration.md
+      - 启用 EdgeDoH: guides/enable-edgedoh.md
+      - 配置 DNS 路由: guides/dns-routing.md
+      - 验证接入: guides/verification.md
+      - 平台与框架适配: guides/platforms.md
+  - 参考:
+      - reference/index.md
+      - API 概念:
+          - 初始化参数: reference/init-parameters.md
+          - 代理配置: reference/proxy-config.md
+      - 各平台 API:
+          - reference/platform-api/index.md
+          - Android: reference/platform-api/android.md
+          - iOS: reference/platform-api/ios.md
+          - Flutter: reference/platform-api/flutter.md
+          - Unity: reference/platform-api/unity.md
+      - 错误码: errors.md
+      - 排障: troubleshooting.md
+  - 更新日志: changelog.md

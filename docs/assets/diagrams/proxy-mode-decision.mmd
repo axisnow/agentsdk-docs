@@ -1,0 +1,27 @@
+flowchart TD
+    Start["选择代理模式"] --> Q1{"应用的网络库<br/>是否支持设置代理？"}
+
+    Q1 -->|"支持 HTTP 代理"| HTTPProxy["使用 HTTP 代理模式"]
+    Q1 -->|"支持 SOCKS5 代理"| SOCKS5Proxy["使用 SOCKS5 代理模式"]
+    Q1 -->|"不支持 / 需要精细控制"| Q2{"需要代理特定的<br/>host:port 还是全部流量？"}
+
+    Q2 -->|"特定 host:port"| TCPProxy["使用 TCP 代理模式"]
+    Q2 -->|"全部流量"| Q3{"优先选择哪种协议？"}
+
+    Q3 -->|"HTTP/HTTPS"| HTTPProxy
+    Q3 -->|"通用 TCP"| SOCKS5Proxy
+
+    HTTPProxy --> HTTPDesc["调用 getLocalHTTPProxy<br/>获取统一 HTTP 代理地址<br/>配置到 HTTP 客户端"]
+    SOCKS5Proxy --> SOCKS5Desc["调用 getLocalSocks5Proxy<br/>获取统一 SOCKS5 代理地址<br/>配置到网络库"]
+    TCPProxy --> TCPDesc["调用 getLocalTCPProxy(host, port)<br/>获取指定目标的本地代理地址<br/>替换原始连接目标"]
+
+    style Start fill:#4A90D9,stroke:#357ABD,color:#fff
+    style Q1 fill:#FFD700,stroke:#DAA520,color:#333
+    style Q2 fill:#FFD700,stroke:#DAA520,color:#333
+    style Q3 fill:#FFD700,stroke:#DAA520,color:#333
+    style HTTPProxy fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style SOCKS5Proxy fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style TCPProxy fill:#7B68EE,stroke:#6A5ACD,color:#fff
+    style HTTPDesc fill:#F0F0F0,stroke:#CCC,color:#333
+    style SOCKS5Desc fill:#F0F0F0,stroke:#CCC,color:#333
+    style TCPDesc fill:#F0F0F0,stroke:#CCC,color:#333

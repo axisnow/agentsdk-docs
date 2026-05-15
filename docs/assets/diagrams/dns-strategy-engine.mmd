@@ -1,0 +1,35 @@
+graph TD
+    Request["域名解析请求"] --> BypassCheck{"命中<br/>edgedoh_bypass_domains？"}
+
+    BypassCheck -->|"是<br/>(豁免)"| SystemDNS["系统 DNS 引擎<br/>(net.Resolver)"]
+    BypassCheck -->|"否"| ResolveCheck{"命中<br/>edgedoh_resolve_domains？"}
+
+    ResolveCheck -->|"是"| EdgeDoH["EdgeDoH 引擎<br/>(自有 Edge 节点)"]
+    ResolveCheck -->|"否<br/>(默认路径)"| SystemDNS
+
+    EdgeDoH -->|"成功"| Cache["写入 SDK 缓存 & 返回结果"]
+    EdgeDoH -->|"失败 / 慢"| FallbackCheck{"fallback=true？"}
+
+    FallbackCheck -->|"是"| HedgedSystem["hedged 并发<br/>系统 DNS 兜底"]
+    FallbackCheck -->|"否"| ExpiredCheck{"开启了 enable_expired_ip？"}
+
+    HedgedSystem -->|"成功"| Cache
+    HedgedSystem -->|"失败"| ExpiredCheck
+
+    SystemDNS -->|"成功"| Cache
+    SystemDNS -->|"失败"| ExpiredCheck
+
+    ExpiredCheck -->|"是 & 有过期缓存"| ReturnExpired["返回过期缓存"]
+    ExpiredCheck -->|"否 / 无缓存"| ReturnError["返回错误"]
+
+    style Request fill:#4A90D9,stroke:#357ABD,color:#fff
+    style BypassCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style ResolveCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style EdgeDoH fill:#3CB371,stroke:#2E8B57,color:#fff
+    style SystemDNS fill:#778899,stroke:#696969,color:#fff
+    style HedgedSystem fill:#778899,stroke:#696969,color:#fff
+    style Cache fill:#3CB371,stroke:#2E8B57,color:#fff
+    style FallbackCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style ExpiredCheck fill:#FFD700,stroke:#DAA520,color:#333
+    style ReturnExpired fill:#FF8C00,stroke:#FF6600,color:#fff
+    style ReturnError fill:#DC143C,stroke:#B22222,color:#fff
