@@ -1,5 +1,5 @@
-site_name: AgentSDK 开发者文档
-site_description: AgentSDK 接入指南、API 参考、错误码与术语表
+site_name: AxisNow SDK 开发者文档
+site_description: AxisNow SDK 接入指南、API 参考、错误码与术语表
 site_url: https://axisnow.github.io/agentsdk-docs/
 site_author: AxisNow
 repo_url: https://github.com/axisnow/agentsdk-docs
