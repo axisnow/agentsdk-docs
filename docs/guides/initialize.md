@@ -6,31 +6,33 @@
 - **iOS**：`-application:didFinishLaunchingWithOptions:`
 - **Flutter**：应用入口 `main()` 异步初始化
 
-初始化时需要传入 **AccessKey**、**Edge 节点地址列表**，可选传入 **DNS 配置**、**加密隧道开关** 等——完整参数语义、默认值、约束见 [参考 / 初始化参数](../reference/init-parameters.md)。
+初始化时需要传入 **AccessKey**、**Edge 节点地址列表**（`edgeNodes`），可选传入 **DNS 配置**（`dns`）、**加密隧道开关**（`secureProxyEnabled`）等——完整参数语义、默认值、约束见 [参考 / 初始化参数](../reference/init-parameters.md)。
 
 ## 调用契约
 
-- 返回 `0` 表示成功，负数为错误码（见 [错误码](../errors.md)）
+- 返回 `0` 表示成功，负数为错误码（见 [错误码](../reference/errors.md)）
 - 全局**仅允许成功初始化一次**，重复调用返回 `-102`
 - 初始化失败后再次调用返回缓存的错误，需**重启进程**重试
 
 ## 代码示例
 
-!!! note
-    下列代码为接口语义示意，真实 API 签名以各平台 Demo 为准——见 [平台与框架适配](platforms.md)。
-
 === "Android (Java)"
 
     ```java
-    public class App extends Application {
+    import com.axsecurity.sdk.service.AXService;
+    import com.axsecurity.sdk.base.AXConfig;
+
+    public class MyApplication extends Application {
         @Override
         public void onCreate() {
             super.onCreate();
-            AXServiceConfig config = new AXServiceConfig();
-            config.setAccessKeyID("YOUR_ACCESS_KEY_ID");
-            config.setAccessKeySecret("YOUR_ACCESS_KEY_SECRET");
-            config.setEdgeAddresses(Arrays.asList("doh.example.com", "203.0.113.1"));
-            int ret = AXService.initialize(this, config);
+
+            AXConfig config = new AXConfig.Builder()
+                .accessKey("YOUR_ACCESS_KEY_ID", "YOUR_ACCESS_KEY_SECRET")
+                .edgeNodes(new String[] { "doh.example.com", "203.0.113.1" })
+                .build();
+
+            int ret = AXService.initialize(this.getApplicationContext(), config);
             if (ret != 0) {
                 Log.e("AXService", "init failed: " + ret);
             }
@@ -41,13 +43,16 @@
 === "iOS (Objective-C)"
 
     ```objc
+    #import <AXSecurity/axsecurity.h>
+
     - (BOOL)application:(UIApplication *)application
         didFinishLaunchingWithOptions:(NSDictionary *)options {
-        AXServiceConfig *config = [[AXServiceConfig alloc] init];
-        config.accessKeyID = @"YOUR_ACCESS_KEY_ID";
+        AXConfig *config = [[AXConfig alloc] init];
+        config.accessKeyID     = @"YOUR_ACCESS_KEY_ID";
         config.accessKeySecret = @"YOUR_ACCESS_KEY_SECRET";
-        config.edgeAddresses = @[@"doh.example.com", @"203.0.113.1"];
-        int ret = [AXService initializeWithConfig:config];
+        config.edgeNodes       = @[@"doh.example.com", @"203.0.113.1"];
+
+        int ret = [AXService initialize:config];
         if (ret != 0) {
             NSLog(@"AXService init failed: %d", ret);
         }
@@ -58,25 +63,24 @@
 === "Flutter (Dart)"
 
     ```dart
+    import 'package:axsecurity_flutter_plugin/axsecurity_flutter_plugin.dart';
+    import 'package:axsecurity_flutter_plugin/config.dart';
+
     Future<void> main() async {
       WidgetsFlutterBinding.ensureInitialized();
-      final config = AxServiceConfig(
-        accessKeyID: 'YOUR_ACCESS_KEY_ID',
+
+      final cfg = AxConfig(
+        accessKeyId: 'YOUR_ACCESS_KEY_ID',
         accessKeySecret: 'YOUR_ACCESS_KEY_SECRET',
-        edgeAddresses: ['doh.example.com', '203.0.113.1'],
+        edgeNodes: ['doh.example.com', '203.0.113.1'],
       );
-      final ret = await AxService.initialize(config);
+
+      final ret = await AxService.initialize(config: cfg);
       if (ret != 0) {
         debugPrint('AxService init failed: $ret');
       }
       runApp(const MyApp());
     }
-    ```
-
-=== "Unity (C#)"
-
-    ```
-    待补充——Unity 平台 API 文档建设中，请参考 Unity Demo 仓库
     ```
 
 ## 常见初始化错误
@@ -86,9 +90,9 @@
 | `-102` | 重复初始化 | 检查是否多次调用 `initialize` |
 | `-111` | 配置 JSON 非法 | 检查字段类型与必填项 |
 | `-112` / `-113` / `-114` | AccessKey 缺失或非法 | 重新从控制台复制完整凭证 |
-| `-115` | EdgeAddresses 为空 | 至少配置一个有效的 Edge 节点地址 |
+| `-115` | edgeNodes 为空 | 至少配置一个有效的 Edge 节点地址 |
 
-完整错误码定义见 [错误码](../errors.md)。
+完整错误码定义见 [错误码](../reference/errors.md)。
 
 ## 下一步
 

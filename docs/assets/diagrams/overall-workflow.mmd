@@ -1,0 +1,37 @@
+graph TB
+    subgraph Client["客户端"]
+        SDK["AxisNow SDK Client<br/>DNS 模块 + Proxy 模块"]
+    end
+
+    subgraph Edge["边缘层"]
+        AED["Edge DoH (AED)<br/>分布式上下文调度"]
+        subgraph DataPlane["Multi-Edge 网络 (Data Plane)"]
+            PrivEdge["Private Edge<br/>AxisNow 自建<br/>(调度面 + 数据面)"]
+            PubEdge["Public Edge<br/>第三方 CDN<br/>(仅数据面)"]
+        end
+    end
+
+    Cloud["AxisNow Cloud (控制面)<br/>策略编排 / 配置分发 / 拨测 / 可观测"]
+
+    Origin["源站"]
+
+    SDK -.->|"① 解析业务域名<br/>(基于上下文)"| AED
+    AED -.->|"② 返回最优数据面"| SDK
+    SDK ==>|"③ Secure Proxy<br/>加密隧道"| PrivEdge
+    SDK -->|"③ Standard Proxy<br/>HTTPS + JWT"| PubEdge
+
+    PrivEdge -->|"④ 回源"| Origin
+    PubEdge -->|"④ 回源"| Origin
+
+    Cloud -.->|"配置下发<br/>(经 AED 中转)"| AED
+    Cloud -.->|"拨测 + 健康检查"| PrivEdge
+    Cloud -.->|"拨测 + 健康检查"| PubEdge
+
+    AED -.- PrivEdge
+
+    style SDK fill:#4A90D9,stroke:#357ABD,color:#fff
+    style AED fill:#3CB371,stroke:#2E8B57,color:#fff
+    style PrivEdge fill:#3CB371,stroke:#2E8B57,color:#fff
+    style PubEdge fill:#5F9EA0,stroke:#4682B4,color:#fff
+    style Cloud fill:#9370DB,stroke:#7B68EE,color:#fff
+    style Origin fill:#DC143C,stroke:#B22222,color:#fff

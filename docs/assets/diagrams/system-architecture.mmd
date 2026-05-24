@@ -1,51 +1,51 @@
 graph LR
     subgraph 客户端设备
         App["应用程序"]
-        subgraph SDK
-            TCP["TCP 代理<br/>127.0.0.1:port"]
+        subgraph SDK["AxisNow SDK Client"]
             HTTP["HTTP 代理<br/>127.0.0.1:port"]
             SOCKS5["SOCKS5 代理<br/>127.0.0.1:port"]
-            DNS["DNS 解析器<br/>(DNS 模块)"]
-            LB["负载均衡<br/>多节点竞速"]
+            DNSMod["DNS 模块<br/>(域名分流)"]
+            ProxyMod["Proxy 模块<br/>(本地代理 + 多节点竞速)"]
         end
     end
 
-    CtrlNode["控制面节点<br/>(Edge DoH)"]
+    AED["Edge DoH (AED)<br/>运行在 Private Edge 上"]
 
-    subgraph 数据面节点
-        D1["AxisNow 节点"]
-        D2["CF / AWS 节点"]
-        D3["节点 N"]
+    subgraph MultiEdge["Multi-Edge 网络 (数据面)"]
+        PrivEdge["Private Edge<br/>(调度面 + 数据面)<br/>Secure Proxy 模式<br/>TLS 加密隧道"]
+        PubEdge["Public Edge<br/>(Cloudflare / AWS 等)<br/>Standard Proxy 模式<br/>JWT Token"]
     end
+
+    Cloud["AxisNow Cloud (控制面)<br/>策略编排 / 配置下发 / 拨测"]
 
     Origin["源站服务器"]
 
-    App -->|"原始请求"| TCP
     App -->|"HTTP 请求"| HTTP
     App -->|"SOCKS5 请求"| SOCKS5
 
-    TCP --> LB
-    HTTP --> LB
-    SOCKS5 --> LB
+    HTTP --> ProxyMod
+    SOCKS5 --> ProxyMod
 
-    LB ==>|"TLS 加密隧道"| D1
-    LB -->D2
-    LB -->D3
+    ProxyMod ==>|"Secure Proxy<br/>TLS 加密隧道"| PrivEdge
+    ProxyMod -->|"Standard Proxy<br/>HTTPS + JWT"| PubEdge
 
-    D1 -->|"转发"| Origin
-    D2 -->|"转发"| Origin
-    D3 -->|"转发"| Origin
+    PrivEdge -->|"回源"| Origin
+    PubEdge -->|"回源"| Origin
 
-    DNS -.->|"寻址 & 同步"| CtrlNode
+    DNSMod -.->|"业务域名解析<br/>(DoH over HTTPS)"| AED
+    AED -.->|"上下文路由<br/>返回最优数据面"| DNSMod
+
+    Cloud -.->|"策略 / 配置下发"| AED
+    Cloud -.->|"拨测 Data Plane"| PrivEdge
+    Cloud -.->|"拨测 Data Plane"| PubEdge
 
     style App fill:#4A90D9,stroke:#357ABD,color:#fff
-    style TCP fill:#7B68EE,stroke:#6A5ACD,color:#fff
     style HTTP fill:#7B68EE,stroke:#6A5ACD,color:#fff
     style SOCKS5 fill:#7B68EE,stroke:#6A5ACD,color:#fff
-    style DNS fill:#20B2AA,stroke:#008B8B,color:#fff
-    style LB fill:#FF8C00,stroke:#FF6600,color:#fff
-    style CtrlNode fill:#3CB371,stroke:#2E8B57,color:#fff
-    style D1 fill:#3CB371,stroke:#2E8B57,color:#fff
-    style D2 fill:#3CB371,stroke:#2E8B57,color:#fff
-    style D3 fill:#3CB371,stroke:#2E8B57,color:#fff
+    style DNSMod fill:#20B2AA,stroke:#008B8B,color:#fff
+    style ProxyMod fill:#FF8C00,stroke:#FF6600,color:#fff
+    style AED fill:#3CB371,stroke:#2E8B57,color:#fff
+    style PrivEdge fill:#3CB371,stroke:#2E8B57,color:#fff
+    style PubEdge fill:#5F9EA0,stroke:#4682B4,color:#fff
+    style Cloud fill:#9370DB,stroke:#7B68EE,color:#fff
     style Origin fill:#DC143C,stroke:#B22222,color:#fff

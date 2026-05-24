@@ -1,6 +1,6 @@
 # 初始化参数
 
-本页从**概念层面**描述 SDK 初始化支持的全部参数：用途、是否必填、默认行为、约束。**不涉及具体平台的字段名 / 大小写 / 嵌套形式**——各平台具体命名与代码示例见 [支持的平台与框架](../guides/platforms.md) 中各 Demo 仓库。协议级取值（错误码、毫秒等）跨平台一致，原样保留。
+本页从**概念层面**描述 SDK 初始化支持的全部参数：用途、是否必填、默认行为、约束。**不涉及具体平台的字段名 / 大小写 / 嵌套形式**——各平台具体命名与代码示例见 [指南 / 平台与框架](../guides/platforms.md) 中各 Demo 仓库。协议级取值（错误码、毫秒等）跨平台一致，原样保留。
 
 ## 基础参数
 
@@ -12,15 +12,15 @@
 - `-113`：Secret 为空
 - `-114`：内容非法（非 UUID 格式 / 解码失败 / 空 tenant 或 deployment）
 
-完整错误码定义参见 [错误码](../errors.md)。
+完整错误码定义参见 [错误码](errors.md)。
 
 ### Edge 节点地址列表（必填）
 
-Edge 节点的访问入口列表。
+寻址 Edge DoH 服务的入口列表（SDK 参数名 `edgeNodes`）——属于 [**调度域名**](../introduction/whitepaper.md#调度域名) 范畴（与业务域名严格区分；业务域名通过 `EdgeDohResolveDomains` 单独配置）。
 
 - **数量建议**：至少配置 1 个；推荐 2 个以上以保证可用性。
 - **格式**：每条只填**域名或 IP**，不带协议前缀（`https://`）和端口号，SDK 内部自动处理。
-- **混填策略**：推荐域名与 IP 混合配置——IP 作为冷启动入口与最后兜底，域名经公共 DoH 解析作为中间回退；运行期 SDK 会从控制面动态获取最优节点并定时刷新缓存。详见 [控制面路由](../introduction/control-plane.md)。
+- **混填策略**：推荐域名与 IP 混合配置——IP 部分作为**预置 EIP**（冷启动入口与最后兜底），域名部分经公共 DoH 解析得到**兜底解析 EIP**；运行期 Edge DoH 还会再下发**策略分配 EIP** 作为最优入口。3 层 EIP 兜底详见 [白皮书 / AxisNow Edge DoH（AED）](../introduction/whitepaper.md#axisnow-edge-dohaed)。
 - **行为**：SDK 启动期对所有节点并行竞速，自动选择响应最快的节点；运行期持续观察节点健康度并在异常时切换。
 
 ### 加密隧道开关（选填）
@@ -34,14 +34,16 @@ Edge 节点的访问入口列表。
 
 DNS 配置控制域名解析行为，所有参数均为可选。按功能分为以下五项。
 
-### DNS 路由：EdgeDoH 白名单 + 黑名单豁免
+### DNS 路由：Edge DoH 白名单 + 黑名单豁免
 
-通过两个域名列表控制对外解析路径：
+通过两个**业务域名**列表控制对外解析路径（与 `edgeNodes` 中的调度域名不同——业务域名指应用实际访问的目标，如 `api.app.com`）：
 
-- **EdgeDoH 白名单**（`edgedoh_resolve_domains`）：命中（精确或 `*.suffix` 通配）的域名走 EdgeDoH，未命中走系统 DNS。
-- **EdgeDoH 黑名单豁免**（`edgedoh_bypass_domains`）：优先级高于白名单；命中 bypass 的域名一律走系统 DNS，即便它同时命中白名单。
+- **Edge DoH 白名单**（`EdgeDohResolveDomains`）：命中（精确或 `*.suffix` 通配）的业务域名走 Edge DoH，未命中走系统 DNS。
+- **Edge DoH 黑名单豁免**（`EdgeDohBypassDomains`）：优先级高于白名单；命中 bypass 的业务域名一律走系统 DNS，即便它同时命中白名单。
 
-匹配优先级：`bypass` 命中 → 系统 DNS（结束）；否则 `resolve` 命中 → EdgeDoH；否则 → 系统 DNS（默认）。
+> 各平台具体方法名见 [指南 / 启用 EdgeDoH](../guides/enable-edgedoh.md) 的代码 tabs。
+
+匹配优先级：`bypass` 命中 → 系统 DNS（结束）；否则 `resolve` 命中 → Edge DoH；否则 → 系统 DNS（默认）。
 
 bypass 的存在是为了支持"`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外"这类场景，无需逐一枚举子域名白名单。
 
@@ -69,12 +71,12 @@ bypass 的存在是为了支持"`*.example.com` 全走 EdgeDoH 但 `login.exampl
 
 ### DNS 预解析名单
 
-初始化时后台异步预解析的域名列表，结果提前写入缓存以消除首次请求的 DNS 延迟。预解析按路由规则自动分发到 EdgeDoH 或系统 DNS（**不必是 `edgedoh_resolve_domains` 子集**）。
+初始化时后台异步预解析的域名列表，结果提前写入缓存以消除首次请求的 DNS 延迟。预解析按路由规则自动分发到 EdgeDoH 或系统 DNS（**不必是 `EdgeDohResolveDomains` 子集**）。
 
 - 建议只放启动后**一定会访问**的域名。
 - 数量控制在 **10 个以内**。
 
-> **完整说明**（解析流程图、各平台配置示例、调优建议等）请参阅 [DNS 配置指南](../introduction/dns.md)。
+> **完整说明**（白名单/豁免、缓存、容错、预解析、典型配置组合）请参阅 [指南 / 配置 DNS 路由](../guides/dns-routing.md)。
 
 ## 常见配置组合范例
 

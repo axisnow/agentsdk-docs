@@ -1,14 +1,14 @@
-# AxisNow 移动/原生应用增强套件白皮书
+# AxisNow SDK 白皮书
 
 ## 前言
 
 在今天的数字世界，移动应用、桌面客户端、工作负载和 IoT 设备正在成为组织核心业务的主要承载形态。然而，传统面向"域名"和"网站"设计的安全加速产品（如 Cloudflare、腾讯云 EdgeOne、阿里云 ESA 等），已经难以充分满足端应用对**安全、速度和高可用**的更高诉求。
 
-为了让您快速且深入地理解 AxisNow 移动/原生应用增强套件（以下简称 SDK 或 AxisNow）的重要性和对应的解决方案，本文将详细阐述其面临的挑战、设计理念、技术架构与典型应用场景。
+为了让您快速且深入地理解 AxisNow SDK（以下简称 SDK 或 AxisNow）的重要性和对应的解决方案，本文将详细阐述其面临的挑战、设计理念、技术架构与典型应用场景。
 
-## 什么是 AxisNow 移动/原生应用增强套件？
+## 什么是 AxisNow SDK？
 
-AxisNow 移动/原生应用增强套件是一项面向多端应用（包括但不限于：手机 App、PC 端应用、IoT 设备等）的**域名解析和安全加速服务**。它通过在客户端集成轻量级 SDK，并与 **AxisNow 或第三方的边缘网络**协同工作，为应用服务带来更强的**安全、速度和高可用**。
+AxisNow SDK 是一项面向多端应用（包括但不限于：手机 App、PC 端应用、IoT 设备等）的**域名解析和安全加速服务**。它通过在客户端集成轻量级 SDK，并与 **AxisNow 或第三方的边缘网络**协同工作，为应用服务带来更强的**安全、速度和高可用**。
 
 不同于传统 CDN 和 WAF 仅作用于服务端域名，AxisNow 将"信任锚点"前移到了应用本身——SDK 在客户端完成可信认证、智能路由、加密通道建立、运行环境检测等关键工作，与边缘网络一起形成**端到端的协同防护与加速**体系。
 
@@ -77,7 +77,7 @@ AxisNow 综合了多项技术能力，可以理解为一款需要客户端配合
 
 ![技术架构总图](../assets/images/whitepaper/architecture-overview.png)
 
-AxisNow 移动/原生应用增强套件由 **AxisNow SDK Client**、**AxisNow Edge DoH**、**Multi-Edge Network（数据面）**、**AxisNow Cloud（控制面）** 三个核心部分组成。三者协同工作，将传统依赖 DNS 和公开域名入口的访问模式，升级为由客户端可信接入、边缘智能调度和控制面统一编排共同驱动的端到端安全加速体系。
+AxisNow SDK 由 **AxisNow SDK Client**、**AxisNow Edge DoH**、**Multi-Edge Network（数据面）**、**AxisNow Cloud（控制面）** 四个核心部分组成。四者协同工作，将传统依赖 DNS 和公开域名入口的访问模式，升级为由客户端可信接入、边缘智能调度和控制面统一编排共同驱动的端到端安全加速体系。
 
 ### AxisNow SDK Client：应用内的可信接入与智能调度代理
 
@@ -409,14 +409,17 @@ AED 根据上下文与控制台下发的路由规则，动态计算并返回最�
 
 SDK 集成只需两步，即可让应用获得可信解析与多边缘接入能力。以下以 Android (Kotlin) 为例：
 
+<!-- TODO: 代码中的类名 AgentConfig / AgentSDK 是早期命名，待 SDK 正式 API 命名确定后批量替换。
+     各平台规范类名见 [指南 / 初始化 SDK](../guides/initialize.md) 的 tabs。 -->
+
 ```kotlin
 // Step 1 — 初始化 SDK（应用启动时调用）
-val config = AgentConfig.Builder()
+val config = AgentConfig.Builder()  // TODO: 类名待对齐
     .accessKeyId("your-access-key-id")
     .accessKeySecret("your-access-key-secret")
     .edgeNodes(listOf("1.1.1.1", "doh.acme.com"))
     .build()
-AgentSDK.init(applicationContext, config)
+AgentSDK.init(applicationContext, config)  // TODO: 类名待对齐
 
 // Step 2 — 将网络请求接入 SDK（推荐 axhttp 零侵入接入）
 val client = AXHTTPService.getOkHttpClient()
@@ -429,7 +432,7 @@ val response = client.newCall(
 
 ## 总结
 
-本白皮书介绍了 AxisNow 移动/原生应用增强套件的整体架构与工作原理。AxisNow 通过在客户端嵌入轻量 SDK，将 DNS 解析、流量路由与安全校验的决策点从中心化的云端前移至设备侧与边缘侧，构建了一条由 SDK、Edge DoH 与 Multi-Edge 数据面共同组成的可信接入链路。
+本白皮书介绍了 AxisNow SDK 的整体架构与工作原理。AxisNow 通过在客户端嵌入轻量 SDK，将 DNS 解析、流量路由与安全校验的决策点从中心化的云端前移至设备侧与边缘侧，构建了一条由 SDK、Edge DoH 与 Multi-Edge 数据面共同组成的可信接入链路。
 
 这一架构带来了几项核心价值：基于设备上下文的智能路由与节点隔离，让安全策略在 DNS 解析层面即可生效；Private Edge 与 Public Edge 的多边缘协同，让企业在安全性、性能、成本与合规之间灵活取舍；去中心化的多层兜底设计，确保在节点故障、DNS 劫持或网络受限等极端场景下，系统仍能自主维持服务。
 

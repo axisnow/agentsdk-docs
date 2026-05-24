@@ -11,11 +11,11 @@ SDK 客户端**不对外打印调试日志**，移动应用沙盒内也无法直
     | 验证维度 | 预期 |
     |---------|------|
     | **请求是否到达** | 日志中能查询到对应客户端的请求记录；若无记录，说明 SDK 没有进入数据路径，或控制台资源未配置正确 |
-    | **DNS 解析路径** | 命中 `edgedoh_resolve_domains` 的域名应标注为 EdgeDoH 解析、Edge 节点符合预期（如就近节点 / 按设备上下文调度的节点）；未配置 EdgeDoH 的域名应直接走系统 DNS |
-    | **是否走 SecureProxy** | 日志区分明文 / 加密通道。**加密隧道开关**启用时应显示为加密通道；关闭时显示为明文 |
+    | **DNS 解析路径** | 命中 `EdgeDohResolveDomains` 的域名应标注为 EdgeDoH 解析、Edge 节点符合预期（如就近节点 / 按设备上下文调度的节点）；未配置 EdgeDoH 的域名应直接走系统 DNS |
+    | **端到端接入模式** | 目标为 Private Edge 应走 **Secure Proxy**（加密隧道）；目标为 Public Edge 应走 **Standard Proxy**（HTTPS + JWT Token）；**加密隧道开关**关闭时 Private Edge 流量降级为明文 |
     | **回源情况** | 请求成功转发到业务源站，状态码与业务预期一致；若出现 4xx / 5xx 异常，对照源站日志排查 |
 
-4. **任一项不符合预期** → 对照 [错误码](../errors.md) 与 [排障](../troubleshooting.md) 定位问题
+4. **任一项不符合预期** → 对照 [错误码](../reference/errors.md) 与 [排障](../resources/troubleshooting.md) 定位问题
 
 !!! note "客户端侧只做最基础校验"
     `initialize` 返回值为 `0` 即应用层成功（详见 [初始化 SDK / 调用契约](initialize.md#调用契约)）。运行期诊断与功能验证**均依赖控制台日志**——这是 SDK 端不打日志的设计取舍。
@@ -33,6 +33,6 @@ SDK 客户端**不对外打印调试日志**，移动应用沙盒内也无法直
 
 验证通过后，本节 Guides 流程到此结束。接下来可：
 
-- **深入理解** SDK 工作机制 → [系统架构](../introduction/architecture.md)
+- **深入理解** SDK 工作机制 → [白皮书](../introduction/whitepaper.md)
 - **查 API / 参数详情** → [参考](../reference/index.md)
-- **遇到运行期问题** → [排障](../troubleshooting.md)
+- **遇到运行期问题** → [排障](../resources/troubleshooting.md)

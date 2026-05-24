@@ -91,34 +91,29 @@ nav:
   - 首页: index.md
   - 简介:
       - introduction/index.md
-      - 概览: introduction/overview.md
-      - Quickstart: introduction/quickstart.md
       - 白皮书: introduction/whitepaper.md
-      - 深入介绍:
-          - 系统架构: introduction/architecture.md
-          - DNS 配置: introduction/dns.md
-          - 控制面路由: introduction/control-plane.md
-          - 术语表: glossary.md
+      - 术语表: introduction/glossary.md
   - 指南:
       - guides/index.md
+      - Quickstart: guides/quickstart.md
       - 接入准备: guides/prerequisites.md
       - 初始化 SDK: guides/initialize.md
       - 集成网络库: guides/network-integration.md
       - 启用 EdgeDoH: guides/enable-edgedoh.md
       - 配置 DNS 路由: guides/dns-routing.md
       - 验证接入: guides/verification.md
-      - 平台与框架适配: guides/platforms.md
+      - 平台与框架: guides/platforms.md
   - 参考:
       - reference/index.md
-      - API 概念:
-          - 初始化参数: reference/init-parameters.md
-          - 代理配置: reference/proxy-config.md
+      - 初始化参数: reference/init-parameters.md
+      - 代理配置: reference/proxy-config.md
+      - 错误码: reference/errors.md
       - 各平台 API:
           - reference/platform-api/index.md
           - Android: reference/platform-api/android.md
           - iOS: reference/platform-api/ios.md
           - Flutter: reference/platform-api/flutter.md
-          - Unity: reference/platform-api/unity.md
-      - 错误码: errors.md
-      - 排障: troubleshooting.md
-  - 更新日志: changelog.md
+  - 资源:
+      - resources/index.md
+      - 排障: resources/troubleshooting.md
+      - 文档更新日志: resources/changelog.md

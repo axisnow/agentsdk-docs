@@ -1,0 +1,90 @@
+name: Lint docs
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements.txt'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 校验所有内部链接、锚点、引用
+      - name: mkdocs build (strict)
+        run: mkdocs build --strict
+
+      # 防止已被白皮书取代的术语回归
+      # 允许出现在术语表（带 ⚠️ 注解）和系统架构（前言里的引导说明）
+      - name: Check legacy terminology
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ALLOWED=(
+            "docs/introduction/glossary.md"
+          )
+
+          check_term() {
+            local term="$1"
+            local repl="$2"
+            local violations=0
+            local file relpath skip allowed
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              relpath="${file#./}"
+              skip=0
+              for allowed in "${ALLOWED[@]}"; do
+                if [ "$relpath" = "$allowed" ]; then
+                  skip=1
+                  break
+                fi
+              done
+              if [ "$skip" = "0" ]; then
+                echo "::error file=$relpath::Legacy term '$term' should be '$repl'"
+                violations=$((violations+1))
+              fi
+            done <<< "$(grep -rln -- "$term" docs/ 2>/dev/null || true)"
+            echo "$violations"
+          }
+
+          total=0
+          v=$(check_term "控制面节点" "Private Edge")
+          total=$((total + v))
+          v=$(check_term "SecureProxy" "Secure Proxy / Standard Proxy")
+          total=$((total + v))
+
+          if [ "$total" -gt 0 ]; then
+            echo "::error::Found $total legacy-terminology violation(s)"
+            exit 1
+          fi
+          echo "✓ No legacy terminology leak outside the allowed files"
+
+      # 防止旧产品名 '增强套件' 残留
+      - name: Check legacy brand name
+        shell: bash
+        run: |
+          if grep -rln -- "增强套件" docs/ 2>/dev/null; then
+            echo "::error::Legacy product name '增强套件' should be 'AxisNow SDK'"
+            exit 1
+          fi
+          echo "✓ Brand name consolidated to 'AxisNow SDK'"

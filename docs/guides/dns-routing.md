@@ -2,21 +2,27 @@
 
 [启用 EdgeDoH](enable-edgedoh.md) 教了最基本的白名单/豁免用法。本页是**进阶配置**：缓存、容错、预解析、典型配置组合。
 
-所有字段的完整定义见 [参考 / 初始化参数 / DNS 配置](../reference/init-parameters.md#dns-配置)。背后原理见 [DNS 配置](../introduction/dns.md)。
+所有字段的完整定义见 [参考 / 初始化参数 / DNS 配置](../reference/init-parameters.md#dns-配置)。背后原理见 [白皮书 / AxisNow Edge DoH（AED）](../introduction/whitepaper.md#axisnow-edge-dohaed)。
+
+!!! note "本页配置针对业务域名"
+    本页的白名单/豁免/缓存等配置都作用于**业务域名**（如 `api.app.com`）——决定 SDK 如何解析它们。
+    SDK 自身寻址 Edge DoH 用的**调度域名**（在 `edgeNodes` 中配置）有独立的 3 层 EIP 兜底机制，不受本页配置影响。两类域名的区分详见 [白皮书 / 路由机制：业务域名与调度域名](../introduction/whitepaper.md#路由机制业务域名与调度域名)。
 
 ## 1. 白名单与豁免（进阶）
 
 ```text
-edgedoh_resolve_domains  → 命中走 EdgeDoH
-edgedoh_bypass_domains    → 命中一律回系统 DNS（优先级高于白名单）
+EdgeDohResolveDomains    → 命中的业务域名走 Edge DoH
+EdgeDohBypassDomains     → 命中一律回系统 DNS（优先级高于白名单）
 ```
+
+> 各平台具体方法名：Android `addEdgeDohResolveDomain(String)` / iOS `-addEdgeDohResolveDomain:` / Flutter `AxDnsConfig(edgeDohResolveDomains: [...])`。bypass 同理。
 
 匹配优先级：**bypass → resolve → 默认（系统 DNS）**。
 
 典型用法：
 
-- `*.example.com` 全走 EdgeDoH，**但 `login.example.com` 例外**（业务策略要求走系统 DNS）：把后者加入 `edgedoh_bypass_domains`
-- **只保护特定域名**（如 `api.example.com`、`cdn.example.com`），其他全走系统：精确加入 `edgedoh_resolve_domains`
+- `*.example.com` 全走 EdgeDoH，**但 `login.example.com` 例外**（业务策略要求走系统 DNS）：把后者加入 `EdgeDohBypassDomains`
+- **只保护特定域名**（如 `api.example.com`、`cdn.example.com`），其他全走系统：精确加入 `EdgeDohResolveDomains`
 
 ## 2. DNS 缓存控制
 
@@ -44,7 +50,7 @@ edgedoh_bypass_domains    → 命中一律回系统 DNS（优先级高于白名�
 
 ## 5. DNS 预解析名单
 
-初始化时**后台异步预解析**的域名列表，结果提前写入缓存以消除首次请求的 DNS 延迟。预解析按路由规则自动分发到 EdgeDoH 或系统 DNS（**不必是 `edgedoh_resolve_domains` 子集**）。
+初始化时**后台异步预解析**的域名列表，结果提前写入缓存以消除首次请求的 DNS 延迟。预解析按路由规则自动分发到 EdgeDoH 或系统 DNS（**不必是 `EdgeDohResolveDomains` 子集**）。
 
 - 建议只放启动后**一定会访问**的域名
 - 数量控制在 **10 个以内**
