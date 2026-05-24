@@ -2,10 +2,6 @@
 
 每个平台/框架都提供独立的 Demo 工程，包含可运行示例、依赖配置和平台特有注意事项（Android ProGuard、iOS Bitcode/ATS 等）。直接点对应 GitHub 链接获取完整代码。
 
-!!! warning "Demo 链接当前为占位 URL"
-    本页所有 Demo 链接当前指向占位 `https://github.com/axisnow/agentsdk-demos/...`。
-    待对外 Demo 仓库地址确定后会批量替换。
-
 ## 核心 SDK 与 axhttp 分层关系
 
 ```
@@ -28,9 +24,10 @@
 
 | 平台 | 语言 | 最低版本 | Demo 仓库 |
 |------|------|---------|----------|
-| Android | Java / Kotlin | API 21 (Android 5.0) | [agentsdk-demos / android](https://github.com/axisnow/agentsdk-demos/tree/main/packing/android/demo) |
-| iOS | Objective-C / Swift | iOS 12.0 | [agentsdk-demos / ios](https://github.com/axisnow/agentsdk-demos/tree/main/packing/ios/demo) |
-| Flutter | Dart | Flutter 2.0+ | [agentsdk-demos / flutter](https://github.com/axisnow/agentsdk-demos/tree/main/packing/flutter/demo) |
+| Android | Java / Kotlin | API 21 (Android 5.0) | [sdk-quickstarts / android](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/android/demo/) |
+| iOS | Objective-C / Swift | iOS 12.0 | [sdk-quickstarts / ios](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/ios/demo/) |
+| Flutter | Dart | Flutter 2.0+ | [sdk-quickstarts / flutter](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/flutter/demo/) |
+| Unity | C# | — | [sdk-quickstarts / unity](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/unity/demo/) |
 
 完整的安装与构建步骤见各 Demo 仓库的 README。
 
@@ -42,18 +39,18 @@ axhttp 是可选的零侵入接入层，与主流 HTTP 框架配套使用，业�
 
 | 框架 | 语言 | Demo 仓库 |
 |------|------|----------|
-| OkHttp | Java | [okhttp-java](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/android/okhttp/java-okhttp/demo) |
-| OkHttp | Kotlin | [okhttp-kotlin](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/android/okhttp/kotlin-okhttp/demo) |
-| Retrofit | Java | [retrofit-java](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/android/retrofit/java-retrofit/demo) |
-| Retrofit | Kotlin | [retrofit-kotlin](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/android/retrofit/kotlin-retrofit/demo) |
-| HttpsURLConnection | Java | [httpsurlconnection-java](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/android/httpsurlconn/java-httpsurlconn/demo) |
+| OkHttp | Java | [okhttp-java](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/android/okhttp/java-okhttp/demo/) |
+| OkHttp | Kotlin | [okhttp-kotlin](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/android/okhttp/kotlin-okhttp/demo/) |
+| Retrofit | Java | [retrofit-java](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/android/retrofit/java-retrofit/demo/) |
+| Retrofit | Kotlin | [retrofit-kotlin](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/android/retrofit/kotlin-retrofit/demo/) |
+| HttpsURLConnection | Java | [httpsurlconnection-java](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/android/httpsurlconn/java-httpsurlconn/demo/) |
 
 ### iOS
 
 | 框架 | 语言 | Demo 仓库 |
 |------|------|----------|
-| URLSession | Objective-C | [urlsession-objc](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/ios/urlsession/oc-urlsession/demo) |
-| URLSession | Swift | [urlsession-swift](https://github.com/axisnow/agentsdk-demos/tree/main/axhttp/ios/urlsession/swift-urlsession/demo) |
+| URLSession | Objective-C | [urlsession-objc](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/ios/urlsession/oc-urlsession/demo) |
+| URLSession | Swift | [urlsession-swift](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/axhttp/ios/urlsession/swift-urlsession/demo) |
 
 ### Flutter
 
@@ -64,7 +61,7 @@ Flutter 插件**内置** HTTP 客户端封装，无需单独的 axhttp 包：
 | `AxClient` | [http](https://pub.dev/packages/http) 包 | `http.Client` 的直接替换，推荐方式 |
 | `AxHttpClient` | `dart:io` `HttpClient` | `HttpClient` 的直接替换，Dio 可通过此类集成 |
 
-详见 Flutter Demo：[agentsdk-demos / flutter](https://github.com/axisnow/agentsdk-demos/tree/main/packing/flutter/demo)。
+详见 Flutter Demo：[sdk-quickstarts / flutter](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/flutter/demo/)。
 
 ## 何时使用 axhttp vs 核心 SDK
 

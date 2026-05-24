@@ -63,7 +63,7 @@ AxisNow SDK 是面向移动 / 原生应用的**应用网络接入 SDK**，通过
 
     文档站源码，欢迎 PR 改进文档。
 
-    [→ axisnow/agentsdk-docs](https://github.com/axisnow/agentsdk-docs)
+    [→ axisnow/sdk-docs](https://github.com/axisnow/sdk-docs)
 
 -   :material-message-question:{ .lg .middle } **反馈与问题**
 
@@ -71,6 +71,6 @@ AxisNow SDK 是面向移动 / 原生应用的**应用网络接入 SDK**，通过
 
     发现文档错误或希望补充内容？欢迎提 Issue。
 
-    [→ GitHub Issues](https://github.com/axisnow/agentsdk-docs/issues)
+    [→ GitHub Issues](https://github.com/axisnow/sdk-docs/issues)
 
 </div>
