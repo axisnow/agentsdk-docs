@@ -73,7 +73,11 @@
 
 ## 手动调用代理 API
 
-如果框架不在 axhttp 覆盖范围内，或需要非 HTTP 协议代理，直接调用核心 SDK 的代理接口：
+如果框架不在 axhttp 覆盖范围内，或需要非 HTTP 协议代理，直接调用核心 SDK 的代理接口。两种代理按需选一即可，无需同时配置。
+
+### HTTP 代理
+
+适用于 HTTP / HTTPS 流量。
 
 === "Android (Java)"
 
@@ -81,16 +85,10 @@
     import com.axsecurity.sdk.service.AXService;
     import com.axsecurity.sdk.service.AXLocalProxy;
 
-    // HTTP 代理
     AXLocalProxy http = AXService.getLocalHTTPProxy();
     Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
             new InetSocketAddress(http.getIp(), http.getPort()));
     // 注入到 HTTP 客户端
-
-    // SOCKS5 代理
-    AXLocalProxy socks5 = AXService.getLocalSocks5Proxy();
-    Proxy socksProxy = new Proxy(Proxy.Type.SOCKS,
-            new InetSocketAddress(socks5.getIp(), socks5.getPort()));
     ```
 
 === "iOS (Objective-C)"
@@ -98,17 +96,56 @@
     ```objc
     #import <AXSecurity/axsecurity.h>
 
-    // HTTP 代理
+    // 同时配置 HTTP 与 HTTPS 两组键，否则 https:// 请求会绕开代理
     AXLocalProxy *http = [AXService getLocalHTTPProxy];
     NSURLSessionConfiguration *cfg = [NSURLSessionConfiguration defaultSessionConfiguration];
     cfg.connectionProxyDictionary = @{
-        @"HTTPEnable": @YES,
-        @"HTTPProxy":  http.ip,
-        @"HTTPPort":   @(http.port),
+        @"HTTPEnable":  @YES,
+        @"HTTPProxy":   http.ip,
+        @"HTTPPort":    @(http.port),
+        @"HTTPSEnable": @YES,
+        @"HTTPSProxy":  http.ip,
+        @"HTTPSPort":   @(http.port),
     };
+    ```
 
-    // SOCKS5 代理
+=== "Flutter (Dart)"
+
+    ```dart
+    import 'package:axsecurity_flutter_plugin/axsecurity_flutter_plugin.dart';
+
+    final http = await AxService.getLocalHTTPProxy();
+    if (http == null) {
+      // SDK 未就绪，检查初始化结果或稍后重试
+      return;
+    }
+    final httpClient = HttpClient();
+    httpClient.findProxy = (uri) => 'PROXY ${http.ip}:${http.port}';
+    ```
+
+### SOCKS5 代理
+
+适用于非 HTTP 协议或需要在 TCP 层统一接管的场景。
+
+=== "Android (Java)"
+
+    ```java
+    import com.axsecurity.sdk.service.AXService;
+    import com.axsecurity.sdk.service.AXLocalProxy;
+
+    AXLocalProxy socks5 = AXService.getLocalSocks5Proxy();
+    Proxy socksProxy = new Proxy(Proxy.Type.SOCKS,
+            new InetSocketAddress(socks5.getIp(), socks5.getPort()));
+    // 注入到网络客户端
+    ```
+
+=== "iOS (Objective-C)"
+
+    ```objc
+    #import <AXSecurity/axsecurity.h>
+
     AXLocalProxy *socks5 = [AXService getLocalSocks5Proxy];
+    NSURLSessionConfiguration *cfg = [NSURLSessionConfiguration defaultSessionConfiguration];
     cfg.connectionProxyDictionary = @{
         @"SOCKSEnable": @YES,
         @"SOCKSProxy":  socks5.ip,
@@ -118,18 +155,7 @@
 
 === "Flutter (Dart)"
 
-    ```dart
-    import 'package:axsecurity_flutter_plugin/axsecurity_flutter_plugin.dart';
-
-    // HTTP 代理
-    final http = await AxService.getLocalHTTPProxy();
-    if (http == null) {
-      // SDK 未就绪，检查初始化结果或稍后重试
-      return;
-    }
-    final httpClient = HttpClient();
-    httpClient.findProxy = (uri) => 'PROXY ${http.ip}:${http.port}';
-    ```
+    `dart:io` 的 `HttpClient.findProxy` 仅支持 `PROXY` / `DIRECT`，不原生支持 SOCKS5。若需 SOCKS5 转发，请参考 Flutter Demo 中的 socket 级集成方式。
 
 ## 调用约束
 
