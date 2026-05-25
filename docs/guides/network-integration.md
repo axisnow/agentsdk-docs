@@ -84,11 +84,29 @@
     ```java
     import com.axsecurity.sdk.service.AXService;
     import com.axsecurity.sdk.service.AXLocalProxy;
+    import okhttp3.OkHttpClient;
+    import okhttp3.Request;
+    import okhttp3.Response;
+    import java.net.InetSocketAddress;
+    import java.net.Proxy;
 
     AXLocalProxy http = AXService.getLocalHTTPProxy();
     Proxy httpProxy = new Proxy(Proxy.Type.HTTP,
             new InetSocketAddress(http.getIp(), http.getPort()));
-    // 注入到 HTTP 客户端
+
+    // 注入到 OkHttpClient 后发起请求
+    OkHttpClient client = new OkHttpClient.Builder()
+            .proxy(httpProxy)
+            .build();
+
+    Request request = new Request.Builder()
+            .url("https://api.example.com/data")
+            .build();
+
+    try (Response response = client.newCall(request).execute()) {
+        String body = response.body().string();
+        // 处理响应
+    }
     ```
 
 === "iOS (Objective-C)"
@@ -107,11 +125,27 @@
         @"HTTPSProxy":  http.ip,
         @"HTTPSPort":   @(http.port),
     };
+
+    // 用配置好的 cfg 创建 session 并发起请求
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:cfg];
+    NSURL *url = [NSURL URLWithString:@"https://api.example.com/data"];
+    NSURLSessionDataTask *task =
+        [session dataTaskWithURL:url
+               completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            if (error) {
+                NSLog(@"request failed: %@", error);
+                return;
+            }
+            // 处理响应
+        }];
+    [task resume];
     ```
 
 === "Flutter (Dart)"
 
     ```dart
+    import 'dart:convert';
+    import 'dart:io';
     import 'package:axsecurity_flutter_plugin/axsecurity_flutter_plugin.dart';
 
     final http = await AxService.getLocalHTTPProxy();
@@ -119,8 +153,15 @@
       // SDK 未就绪，检查初始化结果或稍后重试
       return;
     }
+
     final httpClient = HttpClient();
     httpClient.findProxy = (uri) => 'PROXY ${http.ip}:${http.port}';
+
+    // 用配置好的 httpClient 发起请求
+    final request = await httpClient.getUrl(Uri.parse('https://api.example.com/data'));
+    final response = await request.close();
+    final body = await response.transform(utf8.decoder).join();
+    // 处理响应
     ```
 
 ### SOCKS5 代理
