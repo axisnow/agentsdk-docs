@@ -12,7 +12,7 @@ SDK 客户端**不对外打印调试日志**，移动应用沙盒内也无法直
     |---------|------|
     | **请求是否到达** | 日志中能查询到对应客户端的请求记录；若无记录，说明 SDK 没有进入数据路径，或控制台资源未配置正确 |
     | **DNS 解析路径** | 命中 `EdgeDohResolveDomains` 的域名应标注为 EdgeDoH 解析、Edge 节点符合预期（如就近节点 / 按设备上下文调度的节点）；未配置 EdgeDoH 的域名应直接走系统 DNS |
-    | **端到端接入模式** | 目标为 Private Edge 应走 **Secure Proxy**（加密隧道）；目标为 Public Edge 应走 **Standard Proxy**（HTTPS + JWT Token）；**加密隧道开关**关闭时 Private Edge 流量降级为明文 |
+    | **端到端接入模式** | 目标为 Private Edge 应走 **Secure Proxy**（加密隧道）；目标为 Public Edge 应走 **Standard Proxy**（HTTPS + JWT Token） |
     | **回源情况** | 请求成功转发到业务源站，状态码与业务预期一致；若出现 4xx / 5xx 异常，对照源站日志排查 |
 
 4. **任一项不符合预期** → 对照 [错误码](../reference/errors.md) 与 [排障](../resources/troubleshooting.md) 定位问题
@@ -26,7 +26,6 @@ SDK 客户端**不对外打印调试日志**，移动应用沙盒内也无法直
 |---|---|---|
 | 控制台看不到请求 | 资源未配置 / SDK 未在数据路径 | [接入准备](prerequisites.md) · [集成网络库](network-integration.md) |
 | DNS 路径不是 EdgeDoH | 白名单未生效 / 域名命中豁免 | [启用 EdgeDoH](enable-edgedoh.md) · [配置 DNS 路由](dns-routing.md) |
-| 显示明文通道 | 加密隧道开关被关闭 | [参考 / 初始化参数 / 加密隧道开关](../reference/init-parameters.md#加密隧道开关选填) |
 | 4xx / 5xx | 业务源站 / 资源配置问题 | 控制台资源页 · 源站日志 |
 
 ## 下一步

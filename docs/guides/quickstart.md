@@ -31,7 +31,7 @@ axhttp 与核心 SDK 的分层关系见 [指南 / 平台与框架 / 核心 SDK �
 
 在应用启动**最早时机**调用 SDK 初始化接口（Android `Application.onCreate` / iOS `didFinishLaunchingWithOptions` / Flutter 应用入口），确保在发起任何网络请求之前完成。
 
-初始化时传入 **AccessKey** 与 **Edge 节点地址列表**；可选传入 **DNS 配置**、**加密隧道开关** 等。
+初始化时传入 **AccessKey** 与 **Edge 节点地址列表**；可选传入 **DNS 配置** 等。
 
 - 返回 `0` 即成功，负数为错误码（见 [错误码](../reference/errors.md)）
 - 全局**仅允许成功初始化一次**，重复调用返回 `-102`

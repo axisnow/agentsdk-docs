@@ -6,7 +6,7 @@
 - **iOS**：`-application:didFinishLaunchingWithOptions:`
 - **Flutter**：应用入口 `main()` 异步初始化
 
-初始化时需要传入 **AccessKey**、**Edge 节点地址列表**（`edgeNodes`），可选传入 **DNS 配置**（`dns`）、**加密隧道开关**（`secureProxyEnabled`）等——完整参数语义、默认值、约束见 [参考 / 初始化参数](../reference/init-parameters.md)。
+初始化时需要传入 **AccessKey**、**Edge 节点地址列表**（`edgeNodes`），可选传入 **DNS 配置**（`dns`）等——完整参数语义、默认值、约束见 [参考 / 初始化参数](../reference/init-parameters.md)。
 
 ## 调用契约
 
