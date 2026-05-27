@@ -7,6 +7,7 @@
 - **删除 `quickstart.md`，并入指南首页（`guides/index.md`）** — quickstart 与各 Guide 内容重复且已开始漂移（验证步骤滞后于实际流程），合并为单一来源；其独有的"SDK 本地代理机制"概念与"白皮书 2 步流程关系"并入指南首页，首页 CTA 与简介页入口重定向到指南首页
 - **验证接入流程改版** — 从"控制台请求日志 / 流量观察"改为控制台「端点 / 设备」设备视图 + 设备路由详情
 - **EdgeDoH 示例代码对齐 SDK API 变更** — `addEdgeDohResolveDomain` / `addEdgeDohBypassDomain` 改为 `edgeDohResolveDomains()` / `edgeDohBypassDomains()`（Android varargs / iOS 属性赋值），见 [sdk PR #387](https://github.com/cyberandao/sdk/pull/387)
+- **明确 EdgeDoH 白名单 / 豁免的通配边界** — 仅支持 `*.suffix` 一种形式；裸 `*`、中间 / 多段 / 片段通配均不支持，在 `init-parameters.md` 与 `enable-edgedoh.md` 增加告警说明
 - **「平台与框架」重命名为「支持的平台与框架」** — 标签更明确指向"支持/兼容列表 + Demo 索引"，nav、H1 及全站引用同步更新
 - **「支持的平台与框架」移除 Unity 行**（暂无 Demo / 支持）
 

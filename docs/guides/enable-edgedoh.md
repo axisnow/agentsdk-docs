@@ -76,7 +76,8 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
 
 `bypass` 的存在是为了支持 "`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外" 这类场景，无需逐一枚举子域名白名单。
 
-## 下一步
+!!! warning "通配只支持 `*.suffix`"
+    每个条目要么是精确域名，要么是 `*.` 开头的后缀通配（如 `*.example.com`）。裸 `*`、中间通配（`api.*.com`）、片段通配（`api*.example.com`）等**其他 `*` 写法都不支持**，也无法用一个条目匹配"全部域名"。完整规则见 [参考 / 初始化参数](../reference/init-parameters.md)。
 
 基础白名单启用后，可深入配置：
 
