@@ -31,7 +31,7 @@ AxisNow SDK 是面向移动 / 原生应用的**应用网络接入 SDK**，通过
 
     Android / iOS / Flutter + 7 种 HTTP 客户端框架——直接看可运行示例。
 
-    [→ 平台与框架](guides/platforms.md)
+    [→ 支持的平台与框架](guides/platforms.md)
 
 -   :material-book-open-variant:{ .lg .middle } **理解 SDK 工作机制**
 

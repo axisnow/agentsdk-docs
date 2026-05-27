@@ -16,7 +16,7 @@ AxisNow SDK 在端侧通过**本地代理**承接业务流量。完成 `initiali
 
 ## 推荐：使用 axhttp 扩展
 
-若应用使用主流 HTTP 框架，**不要手动调用代理接口**——直接使用 [指南 / 平台与框架 / axhttp 框架覆盖](../guides/platforms.md#axhttp-框架覆盖) 列出的 axhttp 扩展，业务层只需替换客户端实例。
+若应用使用主流 HTTP 框架，**不要手动调用代理接口**——直接使用 [指南 / 支持的平台与框架 / axhttp 框架覆盖](../guides/platforms.md#axhttp-框架覆盖) 列出的 axhttp 扩展，业务层只需替换客户端实例。
 
 ## 各平台方法名
 
@@ -26,7 +26,7 @@ AxisNow SDK 在端侧通过**本地代理**承接业务流量。完成 `initiali
 | iOS | `[AXService getLocalHTTPProxy]` | `[AXService getLocalSocks5Proxy]` |
 | Flutter | `AxService.getLocalHTTPProxy()` | `AxService.getLocalSocks5Proxy()` |
 
-具体代码示例参见 [指南 / 集成网络库](../guides/network-integration.md) 与各 Demo 仓库链接（见 [指南 / 平台与框架](../guides/platforms.md)）。
+具体代码示例参见 [指南 / 集成网络库](../guides/network-integration.md) 与各 Demo 仓库链接（见 [指南 / 支持的平台与框架](../guides/platforms.md)）。
 
 !!! note "更多 API 待补充"
     本页是首版骨架。后续将补充：返回结构定义（IP/端口 / 是否就绪 / 错误码）、并发与重入约束、自定义超时与拦截器注入、释放与销毁时序等。

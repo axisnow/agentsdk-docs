@@ -12,7 +12,7 @@ SDK 启动后会在本地启动 **HTTP 代理**和 **SOCKS5 代理**服务。你
 - **使用 axhttp 扩展（零侵入）** —— 主流 HTTP 框架（OkHttp / Retrofit / URLSession / `http` 包等）的封装包，直接替换客户端实例，无需感知代理地址
 - **上层应用自行设置代理** —— 应用主动获取本地代理地址，把流量转发到 SDK 的代理服务
 
-axhttp 与核心 SDK 的分层关系见 [平台与框架 / 核心 SDK 与 axhttp 分层关系](platforms.md#核心-sdk-与-axhttp-分层关系)。
+axhttp 与核心 SDK 的分层关系见 [支持的平台与框架 / 核心 SDK 与 axhttp 分层关系](platforms.md#核心-sdk-与-axhttp-分层关系)。
 
 ## 接入路径
 
@@ -30,7 +30,7 @@ axhttp 与核心 SDK 的分层关系见 [平台与框架 / 核心 SDK 与 axhttp
 - **理解 SDK 工作机制** → [简介 / 白皮书](../introduction/whitepaper.md)
 - **遇到错误排查** → [参考 / 错误码](../reference/errors.md) · [资源 / 排障](../resources/troubleshooting.md)
 - **查参数完整定义** → [参考 / 初始化参数](../reference/init-parameters.md) · [参考 / 代理配置](../reference/proxy-config.md)
-- **找平台代码示例** → [平台与框架](platforms.md)（Android / iOS / Flutter + 7 种 HTTP 客户端框架）
+- **找平台代码示例** → [支持的平台与框架](platforms.md)（Android / iOS / Flutter + 7 种 HTTP 客户端框架）
 - **查术语** → [简介 / 术语表](../introduction/glossary.md)
 
 ## 下一步

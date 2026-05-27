@@ -101,7 +101,7 @@ nav:
       - 启用 EdgeDoH: guides/enable-edgedoh.md
       - 配置 DNS 路由: guides/dns-routing.md
       - 验证接入: guides/verification.md
-      - 平台与框架: guides/platforms.md
+      - 支持的平台与框架: guides/platforms.md
   - 参考:
       - reference/index.md
       - 初始化参数: reference/init-parameters.md

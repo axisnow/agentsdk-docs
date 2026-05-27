@@ -73,4 +73,4 @@
 | 术语 | 含义 |
 |------|------|
 | **拨测** | **AxisNow Cloud** 对 Data Plane 节点的健康度探测，结果用于 Edge DoH 调度时剔除不可用节点。<br>**注**：旧版 glossary 描述为"控制面节点对数据面节点的拨测"不准确——拨测由云端发起，是全局监控，不是边缘节点之间的探测。 |
-| **axhttp** | AxisNow SDK 之上的 HTTP 客户端扩展层，零侵入封装主流 HTTP 框架（OkHttp / Retrofit / URLSession 等），见 [指南 / 平台与框架 / axhttp 框架覆盖](../guides/platforms.md#axhttp-框架覆盖)。 |
+| **axhttp** | AxisNow SDK 之上的 HTTP 客户端扩展层，零侵入封装主流 HTTP 框架（OkHttp / Retrofit / URLSession 等），见 [指南 / 支持的平台与框架 / axhttp 框架覆盖](../guides/platforms.md#axhttp-框架覆盖)。 |
