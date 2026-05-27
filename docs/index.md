@@ -8,8 +8,8 @@ hide:
 
 AxisNow SDK 是面向移动 / 原生应用的**应用网络接入 SDK**，通过 EdgeDoH 调度与多边缘代理转发，为应用提供动态路由优化、链路加密、设备可信校验等能力。
 
-[5 分钟看完接入流程 →](guides/quickstart.md){ .md-button .md-button--primary }
-[查看完整接入指南 →](guides/index.md){ .md-button }
+[查看接入指南 →](guides/index.md){ .md-button .md-button--primary }
+[找我的平台 Demo →](guides/platforms.md){ .md-button }
 
 ---
 
@@ -17,13 +17,13 @@ AxisNow SDK 是面向移动 / 原生应用的**应用网络接入 SDK**，通过
 
 <div class="grid cards" markdown>
 
--   :material-rocket-launch:{ .lg .middle } **5 分钟跑通接入**
+-   :material-rocket-launch:{ .lg .middle } **跑通接入**
 
     ---
 
-    用最简流程把 SDK 接到应用里——四步概念流程，无代码版。
+    从接入准备到验证生效——任务式指南，按顺序读完即可上生产（含多平台代码示例）。
 
-    [→ Quickstart](guides/quickstart.md)
+    [→ 接入指南](guides/index.md)
 
 -   :material-cellphone:{ .lg .middle } **找我的平台 Demo**
 

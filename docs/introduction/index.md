@@ -1,6 +1,6 @@
 # 简介
 
-本节面向**首次接触 AxisNow SDK** 的应用开发者，回答"这是什么 / 整体如何工作 / 有哪些核心术语"。如果你想直接开始接入，跳到 [Quickstart](../guides/quickstart.md)。
+本节面向**首次接触 AxisNow SDK** 的应用开发者，回答"这是什么 / 整体如何工作 / 有哪些核心术语"。如果你想直接开始接入，跳到 [指南](../guides/index.md)。
 
 ## 子页面
 
@@ -9,5 +9,5 @@
 
 ## 下一步
 
-- 准备好接入？→ [指南 / Quickstart](../guides/quickstart.md)
+- 准备好接入？→ [指南](../guides/index.md)
 - 想找具体 API？→ [参考](../reference/index.md)

@@ -95,7 +95,6 @@ nav:
       - 术语表: introduction/glossary.md
   - 指南:
       - guides/index.md
-      - Quickstart: guides/quickstart.md
       - 接入准备: guides/prerequisites.md
       - 初始化 SDK: guides/initialize.md
       - 集成网络库: guides/network-integration.md

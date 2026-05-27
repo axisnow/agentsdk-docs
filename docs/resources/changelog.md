@@ -2,6 +2,13 @@
 
 文档站本身的更新日志。SDK 发行版本的变更说明请参阅 [GitHub Releases](https://github.com/axisnow/sdk-docs/releases)（建立后）。
 
+## 2026-05-27
+
+- **删除 `quickstart.md`，并入指南首页（`guides/index.md`）** — quickstart 与各 Guide 内容重复且已开始漂移（验证步骤滞后于实际流程），合并为单一来源；其独有的"SDK 本地代理机制"概念与"白皮书 2 步流程关系"并入指南首页，首页 CTA 与简介页入口重定向到指南首页
+- **验证接入流程改版** — 从"控制台请求日志 / 流量观察"改为控制台「端点 / 设备」设备视图 + 设备路由详情
+- **EdgeDoH 示例代码对齐 SDK API 变更** — `addEdgeDohResolveDomain` / `addEdgeDohBypassDomain` 改为 `edgeDohResolveDomains()` / `edgeDohBypassDomains()`（Android varargs / iOS 属性赋值），见 [sdk PR #387](https://github.com/cyberandao/sdk/pull/387)
+- **平台与框架移除 Unity 行**（暂无 Demo / 支持）
+
 ## 2026-05-15
 
 - **文档结构重设计为 Anthropic / Supabase 风格**
