@@ -28,8 +28,8 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
         .accessKey("YOUR_ACCESS_KEY_ID", "YOUR_ACCESS_KEY_SECRET")
         .edgeNodes(new String[] { "doh.example.com", "203.0.113.1" })
         .dns(new AXConfig.DnsConfig.Builder()
-            .addEdgeDohResolveDomain("*.example.com")
-            .addEdgeDohBypassDomain("login.example.com")  // 可选豁免
+            .edgeDohResolveDomains("*.example.com")
+            .edgeDohBypassDomains("login.example.com")  // 可选豁免
             .build())
         .build();
 
@@ -47,8 +47,8 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
     config.edgeNodes       = @[@"doh.example.com", @"203.0.113.1"];
 
     AXDNSConfig *dns = [[AXDNSConfig alloc] init];
-    [dns addEdgeDohResolveDomain:@"*.example.com"];
-    [dns addEdgeDohBypassDomain:@"login.example.com"];  // 可选豁免
+    dns.edgeDohResolveDomains = @[ @"*.example.com" ];
+    dns.edgeDohBypassDomains  = @[ @"login.example.com" ];  // 可选豁免
     config.dns = dns;
 
     [AXService initialize:config];

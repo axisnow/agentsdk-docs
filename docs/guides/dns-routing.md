@@ -15,7 +15,7 @@ EdgeDohResolveDomains    → 命中的业务域名走 Edge DoH
 EdgeDohBypassDomains     → 命中一律回系统 DNS（优先级高于白名单）
 ```
 
-> 各平台具体方法名：Android `addEdgeDohResolveDomain(String)` / iOS `-addEdgeDohResolveDomain:` / Flutter `AxDnsConfig(edgeDohResolveDomains: [...])`。bypass 同理。
+> 各平台具体方法名：Android `edgeDohResolveDomains(String...)` / iOS `edgeDohResolveDomains` 属性（`NSArray<NSString *> *`）/ Flutter `AxDnsConfig(edgeDohResolveDomains: [...])`。bypass 同理。
 
 匹配优先级：**bypass → resolve → 默认（系统 DNS）**。
 
