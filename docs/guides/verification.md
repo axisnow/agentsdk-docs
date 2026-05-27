@@ -18,7 +18,7 @@ SDK 客户端**不对外打印调试日志**，移动应用沙盒内也无法直
 | 现象 | 可能原因 | 入口 |
 |---|---|---|
 | 控制台看不到设备 | 资源未配置 / SDK 未在数据路径 | [接入准备](prerequisites.md) · [集成网络库](network-integration.md) |
-| DNS 路径不是 EdgeDoH | 白名单未生效 / 域名命中豁免 | [启用 EdgeDoH](enable-edgedoh.md) · [配置 DNS 路由](dns-routing.md) |
+| DNS 路径不是 EdgeDoH | 白名单未生效 / 域名命中豁免 | [启用 EdgeDoH](enable-edgedoh.md) · [参考 / DNS 配置](../reference/dns-config.md) |
 | 4xx / 5xx | 业务源站 / 资源配置问题 | 控制台资源页 · 源站日志 |
 
 ## 下一步

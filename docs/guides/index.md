@@ -20,8 +20,7 @@ axhttp 与核心 SDK 的分层关系见 [支持的平台与框架 / 核心 SDK �
 2. [初始化 SDK](initialize.md) — 在应用启动时完成初始化
 3. [集成网络库](network-integration.md) — 把业务请求接入 SDK 本地代理（推荐 axhttp）
 4. [启用 EdgeDoH](enable-edgedoh.md) — 防 DNS 劫持的基础配置
-5. [配置 DNS 路由](dns-routing.md) — 白名单 / 豁免 / 缓存 / 容错的进阶配置
-6. [验证接入](verification.md) — 通过控制台设备视图验证是否生效
+5. [验证接入](verification.md) — 通过控制台设备视图验证是否生效
 
 ## 也别错过
 
@@ -29,6 +28,7 @@ axhttp 与核心 SDK 的分层关系见 [支持的平台与框架 / 核心 SDK �
 
 - **理解 SDK 工作机制** → [简介 / 白皮书](../introduction/whitepaper.md)
 - **遇到错误排查** → [参考 / 错误码](../reference/errors.md) · [资源 / 排障](../resources/troubleshooting.md)
+- **DNS 高级调优**（白名单 / 豁免 / 缓存 / 容错 / 预解析） → [参考 / DNS 配置](../reference/dns-config.md)
 - **查参数完整定义** → [参考 / 初始化参数](../reference/init-parameters.md) · [参考 / 代理配置](../reference/proxy-config.md)
 - **找平台代码示例** → [支持的平台与框架](platforms.md)（Android / iOS / Flutter + 7 种 HTTP 客户端框架）
 - **查术语** → [简介 / 术语表](../introduction/glossary.md)

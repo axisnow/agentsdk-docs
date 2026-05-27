@@ -8,7 +8,8 @@
 
 手写的概念层 API 定义——参数语义、默认值、约束、返回值。不涉及具体平台的字段名 / 大小写 / 嵌套形式。
 
-- [初始化参数](init-parameters.md) — `initialize` 接受的全部参数：AccessKey、Edge 地址列表、DNS 配置
+- [初始化参数](init-parameters.md) — `initialize` 接受的核心参数：AccessKey、Edge 地址列表
+- [DNS 配置](dns-config.md) — EdgeDoH 白名单 / 豁免、缓存、容错、预解析等域名解析配置
 - [代理配置](proxy-config.md) — 本地代理获取接口（HTTP / SOCKS5 / TCP）的语义与适用场景
 
 ### 各平台 API

@@ -81,6 +81,6 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
 
 基础白名单启用后，可深入配置：
 
-- **DNS 缓存、容错、预解析等高级选项** → [配置 DNS 路由](dns-routing.md)
+- **DNS 缓存、容错、预解析等高级选项** → [参考 / DNS 配置](../reference/dns-config.md)
 - **DNS 解析路径背后的原理** → [白皮书 / AxisNow Edge DoH（AED）](../introduction/whitepaper.md#axisnow-edge-dohaed)
 - **如何验证 EdgeDoH 是否生效** → [验证接入](verification.md)
