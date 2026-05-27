@@ -27,7 +27,6 @@
 | Android | Java / Kotlin | API 21 (Android 5.0) | [sdk-quickstarts / android](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/android/demo/) |
 | iOS | Objective-C / Swift | iOS 12.0 | [sdk-quickstarts / ios](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/ios/demo/) |
 | Flutter | Dart | Flutter 2.0+ | [sdk-quickstarts / flutter](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/flutter/demo/) |
-| Unity | C# | — | [sdk-quickstarts / unity](https://github.com/axisnow/sdk-quickstarts/tree/HEAD/unity/demo/) |
 
 完整的安装与构建步骤见各 Demo 仓库的 README。
 
