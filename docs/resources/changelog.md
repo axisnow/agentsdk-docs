@@ -2,6 +2,10 @@
 
 文档站本身的更新日志。SDK 发行版本的变更说明请参阅 [GitHub Releases](https://github.com/axisnow/sdk-docs/releases)（建立后）。
 
+## 2026-05-30
+
+- **EdgeDoH 白名单 / 豁免新增 catch-all `*`** — 单独一个 `*` 匹配所有域名（含裸域名），配成 `["*"]` 即让全部业务域名走 EdgeDoH；与 bypass 组合即"除黑名单外全部走 EdgeDoH"。修订 5/27 关于"仅支持 `*.suffix`、无法用单条目匹配全部域名"的说明，在 `dns-config.md`、`enable-edgedoh.md`、`glossary.md`、`troubleshooting.md` 同步更新，并在 `dns-config.md` 范例表新增"全域名走 EdgeDoH"组合。对应 sdk worktree 变更（`matchesAny` 支持 `*`）
+
 ## 2026-05-27
 
 - **删除 `quickstart.md`，并入指南首页（`guides/index.md`）** — quickstart 与各 Guide 内容重复且已开始漂移（验证步骤滞后于实际流程），合并为单一来源；其独有的"SDK 本地代理机制"概念与"白皮书 2 步流程关系"并入指南首页，首页 CTA 与简介页入口重定向到指南首页

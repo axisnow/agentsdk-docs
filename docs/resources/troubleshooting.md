@@ -100,7 +100,7 @@
 
 **排查**：
 - 确认域名拼写正确
-- 检查域名是否命中 `EdgeDohResolveDomains`（精确 / `*.suffix` 通配）
+- 检查域名是否命中 `EdgeDohResolveDomains`（catch-all `*` / 精确 / `*.suffix` 通配；注意 `*.example.com` 不匹配裸域名 `example.com`，要全覆盖用 `*`）
 - 检查域名是否被 `EdgeDohBypassDomains` 意外豁免（bypass 优先级高于 resolve）
 - 如果走 EdgeDoH 路径，检查 Edge 节点是否可达
 - 确认 fallback 默认开启，允许 hedged 兜底到系统 DNS

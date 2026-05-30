@@ -10,21 +10,26 @@ DNS 配置控制 SDK 的域名解析行为，初始化时通过 `dns` 配置传�
 
 通过两个**业务域名**列表控制对外解析路径：
 
-- **Edge DoH 白名单**（`EdgeDohResolveDomains`）：命中（精确或 `*.suffix` 通配）的业务域名走 Edge DoH，未命中走系统 DNS。
-- **Edge DoH 黑名单豁免**（`EdgeDohBypassDomains`）：优先级高于白名单；命中 bypass 的业务域名一律走系统 DNS，即便它同时命中白名单。
+- **Edge DoH 白名单**（`EdgeDohResolveDomains`）：命中（catch-all `*`、精确或 `*.suffix` 通配）的业务域名走 Edge DoH，未命中则不走 Edge DoH。
+- **Edge DoH 黑名单豁免**（`EdgeDohBypassDomains`）：优先级高于白名单；命中 bypass 的业务域名一律不走 Edge DoH，即便它同时命中白名单。
 
-匹配优先级：`bypass` 命中 → 系统 DNS（结束）；否则 `resolve` 命中 → Edge DoH；否则 → 系统 DNS（默认）。
+匹配优先级：`bypass` 命中 → 不走 Edge DoH（结束）；否则 `resolve` 命中 → 走 Edge DoH；否则 → 不走 Edge DoH（默认）。
 
-bypass 的存在是为了支持"`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外"这类场景，无需逐一枚举子域名白名单。
+bypass 的存在是为了支持"`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外"这类场景，无需逐一枚举子域名白名单。把白名单配成 catch-all `["*"]`、再用 bypass 列出例外，即"除黑名单外全部域名走 EdgeDoH"。
 
-!!! warning "通配仅支持 `*.suffix` 一种形式"
-    白名单 / 豁免的每个条目，要么是**精确域名**（`api.example.com`），要么是 **`*.` 开头的后缀通配**（`*.example.com`，匹配该后缀下的子域名）。**其他任何 `*` 写法都不支持**：
+!!! warning "通配支持 catch-all `*` 与 `*.suffix` 两种形式"
+    白名单 / 豁免的每个条目，可以是下列三种之一：
 
-    - 裸 `*`（无法用单个条目匹配"全部域名"）
+    - **catch-all `*`**（单独一个星号）：匹配**所有域名**，含裸域名。配成 `["*"]` 即让全部业务域名走 EdgeDoH。
+    - **精确域名**：`api.example.com`。
+    - **`*.` 开头的后缀通配**：`*.example.com`，匹配该后缀下的子域名，但**不匹配裸后缀**（匹配 `api.example.com`，不匹配 `example.com`）；要连裸域名一起覆盖，用 catch-all `*`。
+
+    **其他任何 `*` 写法都不支持**：
+
     - 中间 / 多段通配：`api.*.com`、`*.example.*`
     - 片段通配（`*` 不紧跟 `.`）：`api*.example.com`、`*example.com`
 
-    不支持的写法不会按通配生效（会被当作普通字符的精确串，从而永远不命中）。如需覆盖某后缀下的所有子域名，请用 `*.example.com`。
+    不支持的写法不会按通配生效（会被当作普通字符的精确串，从而永远不命中）。如需覆盖某后缀下的所有子域名，请用 `*.example.com`；要覆盖全部域名，请用单独的 `*`。
 
 ## DNS 缓存控制
 
@@ -62,4 +67,6 @@ bypass 的存在是为了支持"`*.example.com` 全走 EdgeDoH 但 `login.exampl
 | 组合 | EdgeDoH 路由 | 豁免规则 | 适用场景 |
 |------|--------------|----------|---------|
 | 全量启用（推荐） | 业务域名加入白名单（如 `*.example.com`） | — | 生产环境默认，业务域名经 Edge DoH 解析后走 Secure Proxy 加密回源 |
-| 域名分流 | 业务域名加入白名单 | 登录 / 内网域名加入豁免 | 大部分域名走 EdgeDoH，少数特殊域名豁免回系统 DNS |
+| 全域名走 EdgeDoH | 白名单配成 catch-all `["*"]` | — | 所有域名（含裸域名）一律走 EdgeDoH |
+| 全域名 + 例外 | 白名单配成 catch-all `["*"]` | 登录 / 内网域名加入豁免 | 除黑名单外全部走 EdgeDoH，无需逐一枚举白名单 |
+| 域名分流 | 业务域名加入白名单 | 登录 / 内网域名加入豁免 | 大部分域名走 EdgeDoH，少数特殊域名豁免不走 EdgeDoH |

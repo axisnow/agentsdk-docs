@@ -30,7 +30,7 @@
 | 术语 | 含义 |
 |------|------|
 | **调度域名** | 让 SDK 找到 Edge DoH 服务的域名（如 `doh.acme.com`）。**先于任何业务请求被解析**，是系统启动前提，对极致可达性有诉求。在 SDK 初始化参数 `edgeAddresses` 中与预置 EIP 并列配置。 |
-| **业务域名** | 应用实际访问的目标域名（如 `api.app.com`），由 SDK 接管 DNS 解析与流量转发。命中 `edgedoh_resolve_domains` 白名单的域名走 Edge DoH 解析，其他走系统 DNS。 |
+| **业务域名** | 应用实际访问的目标域名（如 `api.app.com`），由 SDK 接管 DNS 解析与流量转发。命中 `edgedoh_resolve_domains` 白名单的域名走 Edge DoH 解析，其他不走 Edge DoH。 |
 
 ---
 
@@ -53,8 +53,8 @@
 |------|------|
 | **EIP** | Edge DoH 服务的对外入口 IP。SDK 持有的 EIP 来源有三类（详见白皮书 § AED 完整请求流程）：<br>① **预置 EIP**——App SDK 内置的兜底地址（`edgeAddresses` 中纯 IP 部分）<br>② **兜底解析 EIP**——通过预配置的兜底域名（公共 DoH / LocalDNS 解析）拿到<br>③ **策略分配 EIP**——Edge DoH 基于设备/网络上下文动态下发的最优 EIP（运行期主用入口） |
 | **兜底域名** | `edgeAddresses` 中以域名形式预埋的部分（如 `doh.acme.com`）。通过公共 DoH 或 LocalDNS 解析得到 EIP，作为预置 EIP 失联时的二级兜底。对应上述"兜底解析 EIP"的获取路径。 |
-| **EdgeDoH 白名单** | `edgedoh_resolve_domains` 中列出的**业务域名**（精确或 `*.suffix` 通配）走 Edge DoH 解析，未命中走系统 DNS。 |
-| **EdgeDoH 豁免** | `edgedoh_bypass_domains` 中列出的业务域名一律走系统 DNS，**优先级高于白名单**。用于"`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外"这类场景。 |
+| **EdgeDoH 白名单** | `edgedoh_resolve_domains` 中列出的**业务域名**（catch-all `*`、精确或 `*.suffix` 通配）走 Edge DoH 解析，未命中则不走 Edge DoH。配成 `["*"]` 即所有域名全走 Edge DoH。 |
+| **EdgeDoH 豁免** | `edgedoh_bypass_domains` 中列出的业务域名一律不走 Edge DoH，**优先级高于白名单**。用于"`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外"这类场景。 |
 
 ---
 

@@ -16,7 +16,7 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
 
 ## SDK 侧：把业务域名加入 EdgeDoH 白名单
 
-在初始化时通过 DNS 配置加入需要走 EdgeDoH 的**业务域名**（精确或 `*.suffix` 通配）：
+在初始化时通过 DNS 配置加入需要走 EdgeDoH 的**业务域名**（catch-all `*`、精确或 `*.suffix` 通配）：
 
 === "Android (Java)"
 
@@ -72,12 +72,15 @@ EdgeDoH 的差异化路由依赖控制台的 DoH 规则。
     await AxService.initialize(config: cfg);
     ```
 
-**匹配优先级**：`EdgeDohBypassDomains` 命中 → 系统 DNS（结束）；否则 `EdgeDohResolveDomains` 命中 → EdgeDoH；否则 → 系统 DNS（默认）。
+**匹配优先级**：`EdgeDohBypassDomains` 命中 → 不走 EdgeDoH（结束）；否则 `EdgeDohResolveDomains` 命中 → 走 EdgeDoH；否则 → 不走 EdgeDoH（默认）。
 
-`bypass` 的存在是为了支持 "`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外" 这类场景，无需逐一枚举子域名白名单。
+`bypass` 的存在是为了支持 "`*.example.com` 全走 EdgeDoH 但 `login.example.com` 例外" 这类场景，无需逐一枚举子域名白名单。把白名单配成 catch-all `["*"]`、再用 bypass 列出例外，即"除黑名单外全部域名走 EdgeDoH"。
 
-!!! warning "通配只支持 `*.suffix`"
-    每个条目要么是精确域名，要么是 `*.` 开头的后缀通配（如 `*.example.com`）。裸 `*`、中间通配（`api.*.com`）、片段通配（`api*.example.com`）等**其他 `*` 写法都不支持**，也无法用一个条目匹配"全部域名"。完整规则见 [参考 / 初始化参数](../reference/init-parameters.md)。
+!!! tip "让所有域名都走 EdgeDoH"
+    把白名单配成单独的 catch-all `*`（如 `.edgeDohResolveDomains("*")`）即匹配**所有域名**，含裸域名。注意 `*.example.com` 这类后缀通配**不匹配裸后缀**（匹配 `api.example.com`，不匹配 `example.com`）——要连裸域名一起覆盖必须用 `*`。
+
+!!! warning "通配支持 catch-all `*` 与 `*.suffix`"
+    每个条目要么是 catch-all `*`、精确域名，要么是 `*.` 开头的后缀通配（如 `*.example.com`）。中间通配（`api.*.com`）、片段通配（`api*.example.com`）等**其他 `*` 写法都不支持**。完整规则见 [参考 / DNS 配置](../reference/dns-config.md)。
 
 基础白名单启用后，可深入配置：
 
