@@ -19,7 +19,9 @@
 寻址 Edge DoH 服务的入口列表（SDK 参数名 `edgeNodes`）——属于 [**调度域名**](../introduction/whitepaper.md#调度域名) 范畴（与业务域名严格区分；业务域名通过 `EdgeDohResolveDomains` 单独配置）。
 
 - **数量建议**：至少配置 1 个；推荐 2 个以上以保证可用性。
-- **格式**：每条只填**域名或 IP**，不带协议前缀（`https://`）和端口号，SDK 内部自动处理。
+- **格式**：每条只填**域名或 IPv4 地址**，不带协议前缀（`https://`）和端口号，SDK 内部自动处理。
+- **仅支持域名与 IPv4**：暂不支持 IPv6——列表中的 IPv6 字面量会在初始化时被自动过滤并打印 warning；域名也只按 IPv4（A 记录）解析，AAAA 记录会被忽略。
+- **归一化与去重**：初始化时地址会被规范化（域名小写化、IDN 转 ASCII/Punycode、去重）；非法地址（格式错误、含通配符 `*` 等）会被丢弃并打印 warning。
 - **混填策略**：推荐域名与 IP 混合配置——IP 部分作为**预置 EIP**（冷启动入口与最后兜底），域名部分经公共 DoH 解析得到**兜底解析 EIP**；运行期 Edge DoH 还会再下发**策略分配 EIP** 作为最优入口。3 层 EIP 兜底详见 [白皮书 / AxisNow Edge DoH（AED）](../introduction/whitepaper.md#axisnow-edge-dohaed)。
 - **行为**：SDK 启动期对所有节点并行竞速，自动选择响应最快的节点；运行期持续观察节点健康度并在异常时切换。
 
