@@ -247,7 +247,7 @@
     封装框架 `AXSecurityWebView`，入口 `[AXWebViewService installOnWebView:]`：把 SDK 本地 HTTP 代理写入该 WebView 的 `WKWebsiteDataStore`，**不改动你的 `WKWebViewConfiguration`、`navigationDelegate` 或任何其它配置**。
 
     ```objc
-    #import <AXSecurityWebView/AXSecurityWebViewHeader.h>
+    #import <AXSecurityWebView/AXSecurityWebView.h>
 
     // 你自己创建的 WebView（可带自己的 delegate / 配置）
     WKWebView *webView = ...;
@@ -282,7 +282,7 @@
 
 === "iOS (Swift)"
 
-    同一个 `AXSecurityWebView` 框架，Objective-C 的 `installOnWebView:` 在 Swift 中即 `AXWebViewService.installOnWebView(_:)`，返回 `Int32` 错误码（与 Objective-C 一致，**不抛异常**）：把 SDK 本地 HTTP 代理写入该 WebView 的 `WKWebsiteDataStore`，**不改动你的 `WKWebViewConfiguration`、`navigationDelegate` 或任何其它配置**。
+    同一个 `AXSecurityWebView` 框架，Objective-C 的 `installOnWebView:` 经 Swift 名称转换为 `AXWebViewService.install(on:)`，返回 `Int32` 错误码（与 Objective-C 一致，**不抛异常**）：把 SDK 本地 HTTP 代理写入该 WebView 的 `WKWebsiteDataStore`，**不改动你的 `WKWebViewConfiguration`、`navigationDelegate` 或任何其它配置**。
 
     ```swift
     import AXSecurityWebView
@@ -291,7 +291,7 @@
     let webView: WKWebView = ...
 
     if #available(iOS 17.0, *) {
-        let rc = AXWebViewService.installOnWebView(webView)
+        let rc = AXWebViewService.install(on: webView)
         if rc != 0 {
             NSLog("代理未生效，错误码: \(rc)")  // 例如 -101：SDK 尚未初始化
         }
@@ -328,4 +328,7 @@ WebView 封装层当前仅提供代理转发，尚不支持对请求做签名或
 
 ## 下一步
 
-业务请求接入完成后，启用 EdgeDoH 防 DNS 劫持 → [启用 EdgeDoH](enable-edgedoh.md)。
+业务请求接入完成后：
+
+- 启用安全代理（加密隧道 / JWT 鉴权）→ [启用安全代理](enable-secure-proxy.md)
+- 启用 EdgeDoH 防 DNS 劫持 → [启用 EdgeDoH](enable-edgedoh.md)
