@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant App as 应用程序
+    participant SDK as SDK (HTTP 代理)
+    participant Data as 数据面节点
+    participant Origin as 源站服务器
+
+    App->>SDK: 1. getLocalHTTPProxy()
+    SDK-->>App: 返回代理地址 127.0.0.1:port
+
+    App->>SDK: 2. 通过 HTTP Proxy 发起请求
+    activate SDK
+
+    SDK->>Data: 3. 建立 TLS 加密隧道，转发请求
+    activate Data
+
+    Data->>Origin: 4. 转发到 api.example.com:443
+    activate Origin
+
+    Origin-->>Data: 5. 返回响应数据
+    deactivate Origin
+
+    Data-->>SDK: 6. 通过隧道回传数据
+    deactivate Data
+
+    SDK-->>App: 7. 返回响应给应用
+    deactivate SDK

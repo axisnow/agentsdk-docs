@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant App as 应用程序
+    participant Wrapper as 平台 Wrapper<br/>(Android/iOS/Flutter)
+    participant Core as SDK Core (Go)
+    participant Device as 设备信息
+    participant Store as 加密存储
+    participant DNS as DNS 预热
+
+    App->>Wrapper: 1. 构建 Config 对象
+    App->>Wrapper: 2. 调用 initialize(config)
+
+    activate Wrapper
+    Wrapper->>Core: 3. 序列化 JSON → FFI 调用
+
+    activate Core
+    Core->>Core: 4. 解析 AccessKey<br/>(提取 TenantUUID, DeploymentUUID)
+
+    Core->>Device: 5. 采集设备信息
+    Device-->>Core: DeviceUUID, 系统信息
+
+    Core->>Store: 6. 初始化加密存储
+    Store-->>Core: 存储就绪
+
+    Core->>Core: 7. 初始化日志系统
+    Core->>Core: 8. 启动本地代理服务
+    Core->>Core: 9. 初始化负载均衡
+
+    Core->>DNS: 10. DNS 预热 (pre_resolve_hosts)
+    activate DNS
+    Note over DNS: 后台异步预解析
+
+    Core-->>Wrapper: 返回 0 (成功)
+    deactivate Core
+
+    Wrapper-->>App: 返回结果码
+    deactivate Wrapper
+
+    DNS-->>Core: 预解析完成
+    deactivate DNS
+
+    Note over App: 初始化完成，可调用代理 API
